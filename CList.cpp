@@ -100,6 +100,25 @@ list *insertBefore (list *nextNode, elem_t element)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+void deleteNode (list *node)
+{
+    if (node == NULL)
+        return;
+
+    if (node->prev != NULL)
+        node->prev->next = node->next;
+    
+    if (node->next != NULL)
+        node->next->prev = node->prev;
+
+    free(node);
+    node = NULL;
+
+    return;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 void listDumpFunction (const list *listPointer, const char *filename, const char *function, const int line)
 {
     assert(listPointer);

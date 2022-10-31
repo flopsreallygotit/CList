@@ -7,7 +7,7 @@ My simple version of double linked list.
 Necessarily for use. Constructs and destructs your list:
 ```
 list *myCoolList = listConstructor();
-listDestructor(list);
+listDestructor(myCoolList);
 ```
 
 ## Insert after and before
@@ -15,6 +15,12 @@ Inserts new element in list after/before pointer you give:
 ```
 list *pointerToNodeWithMyElement = insertAfter(myCoolList, 12); // Inserts 12 to myCoolList->next
 insertAfter(pointerToNodeWithMyElement, 3); // Inserts 3 to pointerToNodeWithMyElement->next
+```
+
+## Delete node
+Removes node from list.
+```
+deleteNode(pointerToNodeWithMyElement);
 ```
 
 ## Dump
@@ -38,14 +44,14 @@ Little example:
 ```
 #include "CList.h"
 
-int main()
+int main ()
 {
   list *myCoolList = listConstructor();
 
   list *pointerToNodeWithMyElement = insertAfter(myCoolList, 12);
   listDump(myCoolList);
 
-  listDestructor(list);
+  listDestructor(myCoolList);
   
   return 0;
 }
