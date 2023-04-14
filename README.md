@@ -1,4 +1,4 @@
-# CList
+# List
 For average pointers enjoyers.
 My simple version of double linked list.
 
@@ -33,27 +33,30 @@ listDump(myCoolList);
 
 Clone this repo:
 ```
-git clone https://github.com/flopsreallygotit/CList.git
+git clone https://github.com/flopsreallygotit/List.git
 ```
 
-Add directory to your project, include CList.h and compile CList.cpp
-Change elem_t to type you need. Default: int.
+Add directory to your project, include listUtils.h and compile listUtils.cpp
+Change elem_t to type you need. Default: char *. And change specificator for it. For example you need "%s" for char * and "%d" for int.
 
 Little example:
 
 ```
-#include "CList.h"
+#include "listUtils.h"
 
 int main ()
 {
-  list *myCoolList = listConstructor();
+    list *List = listConstructor();
 
-  list *pointerToNodeWithMyElement = insertAfter(myCoolList, 12);
-  listDump(myCoolList);
+    char *element = NULL;
+    scanf("%ms", &element);
 
-  listDestructor(myCoolList);
-  
-  return 0;
+    list *pointerToNodeWithMyElement = insertAfter(List, element);
+    listDump(List);
+
+    listDestructor(List);
+
+    return 0;
 }
 ```
 

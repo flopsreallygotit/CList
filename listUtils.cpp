@@ -1,22 +1,6 @@
-#include <malloc.h>
-#include <assert.h>
+#include "listUtils.h"
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#include "CList.h"
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-struct list_
-{
-    list_ *prev = NULL;
-
-    elem_t element = 0;
-
-    list_ *next = NULL;
-};
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 list *listConstructor (void)
 {
@@ -25,7 +9,7 @@ list *listConstructor (void)
     return listPointer;
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void listDestructor (list *listPointer)
 {
@@ -56,7 +40,7 @@ void listDestructor (list *listPointer)
     return;
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 list *insertAfter (list *previousNode, elem_t element)
 { 
@@ -77,7 +61,7 @@ list *insertAfter (list *previousNode, elem_t element)
     return newNode;
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 list *insertBefore (list *nextNode, elem_t element)
 {
@@ -98,7 +82,7 @@ list *insertBefore (list *nextNode, elem_t element)
     return newNode;
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void deleteNode (list *node)
 {
@@ -117,7 +101,7 @@ void deleteNode (list *node)
     return;
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void listDumpFunction (const list *listPointer, const char *filename, const char *function, const int line)
 {
@@ -125,21 +109,24 @@ void listDumpFunction (const list *listPointer, const char *filename, const char
 
     printf("\nList dump at %s:%d in %s\n{\n", filename, line, function);
 
-    printf("    Previous         Element          Next\n");
-
     list *currentNextNode = listPointer->next;
     list *currentPrevNode = listPointer->prev;
 
-    #define PRINTFANDSET(currentNode, newCurrentNode)            \
-        do                                                       \
-        {                                                        \
-            printf("    %-16p %-16d %-16p\n", currentNode->prev, \
-                   currentNode->element, currentNode->next);     \
-            currentNode = newCurrentNode;                        \
-        }                                                        \
+    #define PRINTFANDSET(currentNode, newCurrentNode)       \
+        do                                                  \
+        {                                                   \
+            printf("\t%-16p " SPECIFICATOR " %-16p\n",    \
+                   currentNode->prev,                       \
+                   currentNode->element,                    \
+                   currentNode->next);                      \
+            currentNode = newCurrentNode;                   \
+        }                                                   \
         while (0)
 
-    printf("    %-16p %-16d %-16p\n", listPointer->prev, listPointer->element, listPointer->next);
+    printf("\t%-16p " SPECIFICATOR " %-16p\n", 
+           listPointer->prev, 
+           listPointer->element, 
+           listPointer->next);
 
     while (currentPrevNode != NULL)
         PRINTFANDSET(currentPrevNode, currentPrevNode->prev);
@@ -149,9 +136,9 @@ void listDumpFunction (const list *listPointer, const char *filename, const char
 
     #undef PRINTFANDSET
 
-    printf("}\n");
+    printf("}\n\n");
 
     return;
 }
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
