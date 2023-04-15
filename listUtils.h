@@ -3,6 +3,10 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+#define FREE_ELEMENT_IN_DESTRUCTOR
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 /// @brief Linked list element type.
 
 typedef char * elem_t;
@@ -17,8 +21,6 @@ typedef char * elem_t;
 
 typedef struct list
 {
-    list *prev = NULL;
-
     elem_t element = 0;
 
     list *next = NULL;
@@ -34,43 +36,41 @@ list *listConstructor (void);
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /// @brief Destructor for list.
-/// @param listPointer Pointer to list.
+/// @param List Pointer to list.
 
-void listDestructor (list *listPointer);
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-/// @brief Inserts element after previous node.
-/// @param previousNode Pointer to list.
-/// @param element Element.
-/// @return Pointer to list that contains new element.
-
-list *insertAfter (list *previousNode, elem_t element);
+void listDestructor (list *List);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/// @brief Inserts element before next node.
-/// @param previousNode Pointer to list.
-/// @param element Element.
-/// @return Pointer to list that contains new element.
+/// @brief  Inserts element after tail.
+/// @param  List Pointer to list.
+/// @param  element Element.
+/// @return Ponter to list struct.
 
-list *insertBefore (list *nextNode, elem_t element);
+list *insert (list *Node, elem_t element);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /// @brief Delete node from list.
 /// @param node Pointer to list.
 
-void deleteNode (list *node);
+void deleteNode (list *Node);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /// @brief Define for list dump.
-#define listDump(list) \
-    listDumpFunction(list, __FILE__, __PRETTY_FUNCTION__, __LINE__);
 
-void listDumpFunction (const list *listPointer, const char *filename, 
-                       const char *function, int line);
+#define listDump(List) listDumpFunction(List, __FILE__, __PRETTY_FUNCTION__, __LINE__);
+
+/// @brief List dump.
+/// @param List Pointer to list struct.
+/// @param filename Name of file from where dump was called.
+/// @param function Name of function from where dump was called.
+/// @param line Line of code from where dump was called.
+
+void listDumpFunction (list *List, 
+                       const char *filename, const char *function, 
+                       const int line);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

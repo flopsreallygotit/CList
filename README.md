@@ -4,23 +4,16 @@ My simple version of double linked list.
 
 # Main commands
 ## Constructor and destructor for list
-Necessarily for use. Constructs and destructs your list:
+Necessarily for use. Creates and deletes your list:
 ```
 list *myCoolList = listConstructor();
 listDestructor(myCoolList);
 ```
 
-## Insert after and before
-Inserts new element in list after/before pointer you give:
+## Insert
+Inserts new element in list tail and returns pointer to new node:
 ```
-list *pointerToNodeWithMyElement = insertAfter(myCoolList, 12); // Inserts 12 to myCoolList->next
-insertAfter(pointerToNodeWithMyElement, 3); // Inserts 3 to pointerToNodeWithMyElement->next
-```
-
-## Delete node
-Removes node from list.
-```
-deleteNode(pointerToNodeWithMyElement);
+list *pointerToNodeWithMyElement = insert(myCoolList, 3);
 ```
 
 ## Dump
@@ -46,12 +39,17 @@ Little example:
 
 int main ()
 {
+    // Use #define FREE_ELEMENT_IN_DESTRUCTOR for freeing memory allocated for elements in destructor
+    // typedef char * elem_t
+    // #define SPECIFICATOR "%s"
+
     list *List = listConstructor();
 
     char *element = NULL;
     scanf("%ms", &element);
 
-    list *pointerToNodeWithMyElement = insertAfter(List, element);
+    list *newNode = insert(List, element);
+
     listDump(List);
 
     listDestructor(List);

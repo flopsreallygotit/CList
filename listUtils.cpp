@@ -9,137 +9,74 @@
 
 list *listConstructor (void)
 {
-    list *listPointer = (list *) calloc (1, sizeof(list));
-
-    return listPointer;
+    return (list *) calloc (1, sizeof(list));
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void listDestructor (list *listPointer)
+void listDestructor (list *List)
 {
-    if (listPointer == NULL)
-        return;
+    list *currentNode = List;
 
-    list *currentNextNode = listPointer->next;
-    list *currentPrevNode = listPointer->prev;
-    free(listPointer);
+    while (currentNode != NULL)
+    {
+        list *currentNodeNext = currentNode->next;
 
-    #define FREEANDSET(currentNode, newCurrentNode) \
-        do                                          \
-        {                                           \
-            list *trash = currentNode;              \
-            currentNode = newCurrentNode;           \
-            free(trash);                            \
-        }                                           \
-        while (0)
+        #ifdef FREE_ELEMENT_IN_DESTRUCTOR
+        free(currentNode->element);
+        #endif
 
-    while (currentPrevNode != NULL)
-        FREEANDSET(currentPrevNode, currentPrevNode->prev);
-    
-    while (currentNextNode != NULL)
-        FREEANDSET(currentNextNode, currentNextNode->next);
+        currentNode->element = 0;
+        currentNode->next = NULL;
 
-    #undef FREEANDSET
+        free(currentNode);
+
+        currentNode = currentNodeNext;
+    }
 
     return;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-list *insertAfter (list *previousNode, elem_t element)
-{ 
-    if (previousNode == NULL)
+list *insert (list *Node, elem_t element)
+{
+    if (Node == NULL)
         return NULL;
- 
+
     list *newNode = (list *) calloc (1, sizeof(list));
- 
     newNode->element = element;
- 
-    newNode->next      = previousNode->next;
-    previousNode->next = newNode;
-    newNode->prev      = previousNode;
- 
-    if (newNode->next != NULL)
-        newNode->next->prev = newNode;
+
+    list *currentNode = Node;
+    while (currentNode->next != NULL)
+        currentNode = currentNode->next;
+
+    currentNode->next = newNode;
 
     return newNode;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-list *insertBefore (list *nextNode, elem_t element)
+void listDumpFunction (list *List, 
+                       const char *filename, const char *function, 
+                       const int line)
 {
-    if (nextNode == NULL)
-        return NULL;
-
-    list *newNode = (list *) calloc (1, sizeof(list));
- 
-    newNode->element = element;
- 
-    newNode->prev  = nextNode->prev;
-    nextNode->prev = newNode;
-    newNode->next  = nextNode;
- 
-    if (newNode->prev != NULL)
-        newNode->prev->next = newNode;
-
-    return newNode;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-void deleteNode (list *node)
-{
-    if (node == NULL)
+    if (List == NULL)
         return;
-
-    if (node->prev != NULL)
-        node->prev->next = node->next;
-    
-    if (node->next != NULL)
-        node->next->prev = node->prev;
-
-    free(node);
-    node = NULL;
-
-    return;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-void listDumpFunction (const list *listPointer, const char *filename, const char *function, const int line)
-{
-    assert(listPointer);
 
     printf("\nList dump at %s:%d in %s\n{\n", filename, line, function);
 
-    list *currentNextNode = listPointer->next;
-    list *currentPrevNode = listPointer->prev;
+    list *currentNode = List;
+    while (currentNode != NULL)
+    {
+        list *currentNodeNext = currentNode->next;
 
-    #define PRINTFANDSET(currentNode, newCurrentNode)       \
-        do                                                  \
-        {                                                   \
-            printf("\t%-16p " SPECIFICATOR " %-16p\n",    \
-                   currentNode->prev,                       \
-                   currentNode->element,                    \
-                   currentNode->next);                      \
-            currentNode = newCurrentNode;                   \
-        }                                                   \
-        while (0)
+        printf("\tNode:\t\t%p\n\tElement:\t" SPECIFICATOR "\n\tNext:\t\t%p\n\n",
+               currentNode, currentNode->element, currentNodeNext);
 
-    printf("\t%-16p " SPECIFICATOR " %-16p\n", 
-           listPointer->prev, 
-           listPointer->element, 
-           listPointer->next);
-
-    while (currentPrevNode != NULL)
-        PRINTFANDSET(currentPrevNode, currentPrevNode->prev);
-    
-    while (currentNextNode != NULL)
-        PRINTFANDSET(currentNextNode, currentNextNode->next);
-
-    #undef PRINTFANDSET
+        currentNode = currentNodeNext;
+    }
 
     printf("}\n\n");
 
