@@ -13,7 +13,7 @@ listDestructor(myCoolList);
 ## Insert
 Inserts new element in list tail and returns pointer to new node:
 ```
-list *pointerToNodeWithMyElement = insert(myCoolList, 3);
+list *pointerToNodeWithMyElement = listInsert(myCoolList, 3);
 ```
 
 ## Dump
@@ -48,7 +48,7 @@ int main ()
     char *element = NULL;
     scanf("%ms", &element);
 
-    list *newNode = insert(List, element);
+    list *newNode = listInsert(List, element);
 
     listDump(List);
 

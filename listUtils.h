@@ -47,7 +47,7 @@ void listDestructor (list *List);
 /// @param  element Element.
 /// @return Ponter to list struct.
 
-list *insert (list *Node, elem_t element);
+list *listInsert (list *Node, elem_t element);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

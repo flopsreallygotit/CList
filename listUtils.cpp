@@ -39,7 +39,7 @@ void listDestructor (list *List)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-list *insert (list *Node, elem_t element)
+list *listInsert (list *Node, elem_t element)
 {
     if (Node == NULL)
         return NULL;
