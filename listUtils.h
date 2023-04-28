@@ -1,9 +1,5 @@
-#ifndef CLIST_H
-#define CLIST_H
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#define FREE_ELEMENT_IN_DESTRUCTOR
+#ifndef LIST_UTILS_H
+#define LIST_UTILS_H
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -35,10 +31,21 @@ list *listConstructor (void);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+/// @brief Don't deletes element.
+/// @param element Element.
+
+void passDestruction  (elem_t element);
+
+/// @brief Deletes string.
+/// @param string Default zero terminated string.
+
+void stringDestructor (char *string);
+
 /// @brief Destructor for list.
 /// @param List Pointer to list.
+/// @param elementDestructor Function for element memory deallocating.
 
-void listDestructor (list *List);
+void listDestructor (list *List, void (*elementDestructor) (elem_t element));
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -51,10 +58,36 @@ list *listInsert (list *Node, elem_t element);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/// @brief Delete node from list.
-/// @param node Pointer to list.
+/// @brief  Comparator for strings.
+/// @param  string_1 First string.
+/// @param  string_2 Second string.
+/// @return Returns sign of difference first different symbols or zero if all corresponding symbols are equal.
 
-void deleteNode (list *Node);
+int stringComparator (char *string_1, char *string_2);
+
+/// @brief  Comparator for int.
+/// @param  integer_1 First int.
+/// @param  integer_2 Second int.
+/// @return Returns sign of difference 
+
+int integerComparator (int integer_1, int integer_2);
+
+/// @brief  Finds element in list.
+/// @param  List Pointer to list struct.
+/// @param  element Element that you want to find.
+/// @param  comparator Function that compares elements and returns positive number if first is bigger, -1 if it is lower and 0 if they are equal.
+/// @return Pointer to node with required element or NULL if element is not in list.
+
+list *listFind (list *List, elem_t element, 
+                int (*comparator) (elem_t element_1, elem_t element_2));
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/// @brief Returns size of elements.
+/// @param List Pointer to list struct.
+/// @return Size of list.
+
+size_t listSize (list *List);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
