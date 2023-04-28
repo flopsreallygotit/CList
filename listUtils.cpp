@@ -9,7 +9,21 @@
 
 list *listConstructor (void)
 {
-    return (list *) calloc (1, sizeof(list));
+    list *List = (list *) calloc (1, sizeof(list));
+
+    assert(List != NULL &&
+           "Can't allocate memory for list.");
+
+    List->size = 0;
+
+    List->head = (node *) calloc (1, sizeof(node));
+
+    assert(List->head != NULL &&
+           "Can't allocate memory for list head.");
+
+    List->tail = List->head;
+
+    return List; 
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -26,42 +40,44 @@ void stringDestructor (char *string)
     return;
 }
 
-void listDestructor (list *List, void (*elementDestructor) (elem_t element))
+void listDestructor (list *List, 
+                     void (*elementDestructor) (elem_t element))
 {
-    list *currentNode = List;
+    node *currentNode = List->head;
 
     while (currentNode != NULL)
     {
-        list *currentNodeNext = currentNode->next;
+        node *currentNodeNext = currentNode->next;
 
         elementDestructor(currentNode->element);
-
-        currentNode->element = 0;
-        currentNode->next = NULL;
 
         free(currentNode);
 
         currentNode = currentNodeNext;
     }
 
+    free(List);
+
     return;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-list *listInsert (list *Node, elem_t element)
+node *listInsert (list *List, elem_t element)
 {
-    if (Node == NULL)
+    if (List == NULL)
         return NULL;
 
-    list *newNode = (list *) calloc (1, sizeof(list));
+    node *newNode = (node *) calloc (1, sizeof(node));
+
+    assert(newNode != NULL &&
+           "Can't allocate memory for new node.");
+
     newNode->element = element;
 
-    list *currentNode = Node;
-    while (currentNode->next != NULL)
-        currentNode = currentNode->next;
-
-    currentNode->next = newNode;
+    List->tail->next = newNode;
+    List->tail = newNode;
+    List->size++;
 
     return newNode;
 }
@@ -98,13 +114,13 @@ int integerComparator (int integer_1, int integer_2)
     return 0;
 }
 
-list *listFind (list *List, elem_t element, 
+node *listFind (list *List, elem_t element, 
                 int (*comparator) (elem_t element_1, elem_t element_2))
 {
     if (List == NULL)
         return NULL;
 
-    list *currentNode = List->next;
+    node *currentNode = List->head->next;
     while (currentNode != NULL)
     {
         if (comparator(element, currentNode->element) == 0)
@@ -118,23 +134,6 @@ list *listFind (list *List, elem_t element,
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-size_t listSize (list *List)
-{
-    size_t size = 0;
-
-    list *currentNode = List->next; // Head node always contains NULL
-    while (currentNode != NULL)
-    {
-        size++;
-
-        currentNode = currentNode->next;
-    }
-
-    return size;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 void listDumpFunction (list *List, 
                        const char *filename, const char *function, 
                        const int line)
@@ -142,12 +141,15 @@ void listDumpFunction (list *List,
     if (List == NULL)
         return;
 
-    printf("\nList dump at %s:%d in %s\n{\n", filename, line, function);
+    printf("\nList dump at %s:%d in %s\n{\n"
+           "\tList head: %p;\n\tList tail: %p;\n\n", 
+           filename, line, function,
+           List->head, List->tail);
 
-    list *currentNode = List;
+    node *currentNode = List->head;
     while (currentNode != NULL)
     {
-        list *currentNodeNext = currentNode->next;
+        node *currentNodeNext = currentNode->next;
 
         printf("\tNode:\t\t%p\n\tElement:\t" SPECIFICATOR "\n\tNext:\t\t%p\n\n",
                currentNode, currentNode->element, currentNodeNext);

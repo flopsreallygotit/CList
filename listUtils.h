@@ -13,13 +13,23 @@ typedef char * elem_t;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+/// @brief Node struct.
+
+typedef struct node
+{
+    elem_t element;
+
+    node *next;
+} node;
+
 /// @brief List struct.
 
 typedef struct list
 {
-    elem_t element = 0;
+    size_t size = 0;
 
-    list *next = NULL;
+    node *head = NULL;
+    node *tail = NULL;
 } list;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -54,7 +64,7 @@ void listDestructor (list *List, void (*elementDestructor) (elem_t element));
 /// @param  element Element.
 /// @return Ponter to list struct.
 
-list *listInsert (list *Node, elem_t element);
+node *listInsert (list *List, elem_t element);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -78,16 +88,8 @@ int integerComparator (int integer_1, int integer_2);
 /// @param  comparator Function that compares elements and returns positive number if first is bigger, -1 if it is lower and 0 if they are equal.
 /// @return Pointer to node with required element or NULL if element is not in list.
 
-list *listFind (list *List, elem_t element, 
+node *listFind (list *List, elem_t element, 
                 int (*comparator) (elem_t element_1, elem_t element_2));
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-/// @brief Returns size of elements.
-/// @param List Pointer to list struct.
-/// @return Size of list.
-
-size_t listSize (list *List);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
